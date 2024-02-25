@@ -1,5 +1,6 @@
 import React from 'react'
-import Temperature from './Project 3/Temperature'
+import Temperature from './Temperature/Temperature'
+import SearchFilter from './SearchFilter/SearchFilter'
 
 const App = (): React.ReactElement => {
   const containerStyle: React.CSSProperties = {
@@ -12,7 +13,8 @@ const App = (): React.ReactElement => {
 
   return (
     <div style={containerStyle} data-bs-theme="dark">
-      <Temperature />
+      <Temperature/>
+      <SearchFilter/>
     </div>
   )
 }
