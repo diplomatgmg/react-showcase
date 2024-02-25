@@ -41,8 +41,7 @@ const Temperature = (): ReactElement => {
   )
 
   return (
-    <Card>
-      <h5 className="card-title text-center mb-3 h2">Temperature</h5>
+    <Card name={'Temperature'}>
       {renderTemperature()}
       {renderButtons()}
     </Card>
