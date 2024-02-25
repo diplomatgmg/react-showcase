@@ -1,6 +1,7 @@
 import React, { type ReactElement, useState } from 'react'
 import './style.css'
 import clsx from 'clsx'
+import Card from '../components/Card'
 
 const Temperature = (): ReactElement => {
   const [temperature, setTemperature] = useState<number>(7)
@@ -40,11 +41,11 @@ const Temperature = (): ReactElement => {
   )
 
   return (
-    <div className="card p-5 rounded-4">
+    <Card>
       <h5 className="card-title text-center mb-3 h2">Temperature</h5>
       {renderTemperature()}
       {renderButtons()}
-    </div>
+    </Card>
 
   )
 }
