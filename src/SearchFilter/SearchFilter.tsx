@@ -33,7 +33,7 @@ const SearchFilter = (): ReactElement => {
   })
 
   const renderCountries = (): ReactElement | null => {
-    if (filteredCountries.length === 0) {
+    if (!countrySelected && filteredCountries.length === 0) {
       return <div>Страна не найдена...</div>
     }
     return (
