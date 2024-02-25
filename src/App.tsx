@@ -1,9 +1,18 @@
 import React from 'react'
+import Temperature from './Project 3/Temperature'
 
 const App = (): React.ReactElement => {
+  const containerStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: '50px',
+    gap: '100px'
+  }
+
   return (
-    <div>
-      App component 1
+    <div style={containerStyle} data-bs-theme="dark">
+      <Temperature />
     </div>
   )
 }
