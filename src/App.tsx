@@ -2,6 +2,7 @@ import React from 'react'
 import Temperature from './Temperature/Temperature'
 import SearchFilter from './SearchFilter/SearchFilter'
 import Registration from './Registration/RegistrationForm'
+import Calculator from './Calculator/Calculator'
 
 const App = (): React.ReactElement => {
   const containerStyle: React.CSSProperties = {
@@ -17,6 +18,7 @@ const App = (): React.ReactElement => {
       <Temperature/>
       <SearchFilter/>
       <Registration/>
+      <Calculator/>
     </div>
   )
 }
