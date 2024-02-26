@@ -1,6 +1,7 @@
 import React from 'react'
 import Temperature from './Temperature/Temperature'
 import SearchFilter from './SearchFilter/SearchFilter'
+import Registration from './Registration/RegistrationForm'
 
 const App = (): React.ReactElement => {
   const containerStyle: React.CSSProperties = {
@@ -15,6 +16,7 @@ const App = (): React.ReactElement => {
     <div style={containerStyle} data-bs-theme="dark">
       <Temperature/>
       <SearchFilter/>
+      <Registration/>
     </div>
   )
 }
