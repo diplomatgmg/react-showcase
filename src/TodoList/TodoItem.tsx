@@ -23,6 +23,8 @@ const TodoItem: FC<TodoItemProps> = ({ text, onRemove, onRename, onCancel, onSav
         value={inputValue}
         onChange={handleInputValue}
         className="form-control"
+        autoFocus
+        onFocus={(e) => e.target.select()}
       />
       <div className="d-flex ms-2">
         <button className="btn btn-success btn-sm" onClick={() => onSave(inputValue)}>
