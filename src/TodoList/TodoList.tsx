@@ -7,12 +7,12 @@ import { uniqueId } from 'lodash'
 interface Todo {
   id: number
   text: string
+  isEditing: boolean
 }
 
 const TodoList = (): ReactElement => {
   const [inputValue, setInputValue] = useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
-
   const [taskItems, setTaskItems] = useState<Todo[]>([])
   const inputRef = useRef<HTMLInputElement | null>(null)
 
@@ -32,12 +32,41 @@ const TodoList = (): ReactElement => {
 
     const todo: Todo = {
       id: Number(uniqueId()),
-      text: inputValue
+      text: inputValue,
+      isEditing: false
     }
 
     setTaskItems((prevState) => [todo, ...prevState])
     setInputValue('')
     inputRef.current?.focus()
+  }
+
+  const handleRemoveTask = (idToRemove: number) => () => {
+    setTaskItems((prevState => prevState.filter(({ id }) => id !== idToRemove)))
+  }
+
+  const handleToggleRenameTask = (idToRename: number) => () => {
+    setTaskItems((prevState) =>
+      prevState.map((item) =>
+        item.id === idToRename ? { ...item, isEditing: true } : item
+      )
+    )
+  }
+
+  const handleCancelTask = (idToCancelEdit: number) => () => {
+    setTaskItems((prevState) =>
+      prevState.map((item) =>
+        item.id === idToCancelEdit ? { ...item, isEditing: false } : item
+      )
+    )
+  }
+
+  const handleSaveRenamedTask = (idToRename: number) => (newName: string) => {
+    setTaskItems((prevState) =>
+      prevState.map((item) =>
+        item.id === idToRename ? { ...item, text: newName, isEditing: false } : item
+      )
+    )
   }
 
   const renderTodoItems = (): ReactElement | null => {
@@ -47,14 +76,26 @@ const TodoList = (): ReactElement => {
 
     return (
       <ul className="list-group">
-        {taskItems.map(({ id, text }) => <TodoItem key={id} id={id} text={text}/>)}
+        {taskItems.map(({ id, ...rest }) => (
+          <TodoItem key={id}
+                    onRemove={handleRemoveTask(id)}
+                    onRename={handleToggleRenameTask(id)}
+                    onCancel={handleCancelTask(id)}
+                    onSave={handleSaveRenamedTask(id)}
+                    {...rest}/>
+        ))}
       </ul>
     )
   }
 
   return (
     <Card name={'TodoList'} widthClass={'col-md-4'}>
-      <TodoForm onAddTask={handleAddTask} inputValue={inputValue} errorMessage={errorMessage} onInputTask={handleInputTask} inputRef={inputRef}/>
+      <TodoForm onAddTask={handleAddTask}
+                inputValue={inputValue}
+                errorMessage={errorMessage}
+                onInputTask={handleInputTask}
+                inputRef={inputRef}/>
+
       {renderTodoItems()}
     </Card>
   )
