@@ -13,14 +13,14 @@ interface Todo {
 const TodoList = (): ReactElement => {
   const [inputValue, setInputValue] = useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
-  const [taskItems, setTaskItems] = useState<Todo[]>([])
+  const [todoItems, setTodoItems] = useState<Todo[]>([])
   const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const handleInputTask = (e: ChangeEvent<HTMLInputElement>): void => {
+  const handleInputTodo = (e: ChangeEvent<HTMLInputElement>): void => {
     setInputValue(e.target.value)
   }
 
-  const handleAddTask = (e: FormEvent<HTMLFormElement>): void => {
+  const handleAddTodo = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
 
     if (inputValue.trim() === '') {
@@ -36,52 +36,44 @@ const TodoList = (): ReactElement => {
       isEditing: false
     }
 
-    setTaskItems((prevState) => [todo, ...prevState])
+    setTodoItems((prevState) => [todo, ...prevState])
     setInputValue('')
     inputRef.current?.focus()
   }
 
-  const handleRemoveTask = (idToRemove: number) => () => {
-    setTaskItems((prevState => prevState.filter(({ id }) => id !== idToRemove)))
+  const handleRemoveTodo = (idToRemove: number) => () => {
+    setTodoItems((prevState => prevState.filter(({ id }) => id !== idToRemove)))
   }
 
-  const handleToggleRenameTask = (idToRename: number) => () => {
-    setTaskItems((prevState) =>
-      prevState.map((item) =>
-        item.id === idToRename ? { ...item, isEditing: true } : item
-      )
-    )
+  const updateTodoItems = (id: number, updater: (item: Todo) => Todo): void => {
+    setTodoItems((prev) => prev.map((item) => (item.id === id ? updater(item) : item)))
   }
 
-  const handleCancelTask = (idToCancelEdit: number) => () => {
-    setTaskItems((prevState) =>
-      prevState.map((item) =>
-        item.id === idToCancelEdit ? { ...item, isEditing: false } : item
-      )
-    )
+  const handleToggleRenameTodo = (id: number) => () => {
+    updateTodoItems(id, (item) => ({ ...item, isEditing: true }))
   }
 
-  const handleSaveRenamedTask = (idToRename: number) => (newName: string) => {
-    setTaskItems((prevState) =>
-      prevState.map((item) =>
-        item.id === idToRename ? { ...item, text: newName, isEditing: false } : item
-      )
-    )
+  const handleCancelTodo = (id: number) => () => {
+    updateTodoItems(id, (item) => ({ ...item, isEditing: false }))
+  }
+
+  const handleSaveRenamedTodo = (id: number) => (newName: string) => {
+    updateTodoItems(id, (item) => ({ ...item, isEditing: false, text: newName }))
   }
 
   const renderTodoItems = (): ReactElement | null => {
-    if (taskItems.length === 0) {
+    if (todoItems.length === 0) {
       return null
     }
 
     return (
       <ul className="list-group">
-        {taskItems.map(({ id, ...rest }) => (
+        {todoItems.map(({ id, ...rest }) => (
           <TodoItem key={id}
-                    onRemove={handleRemoveTask(id)}
-                    onRename={handleToggleRenameTask(id)}
-                    onCancel={handleCancelTask(id)}
-                    onSave={handleSaveRenamedTask(id)}
+                    onRemove={handleRemoveTodo(id)}
+                    onRename={handleToggleRenameTodo(id)}
+                    onCancel={handleCancelTodo(id)}
+                    onSave={handleSaveRenamedTodo(id)}
                     {...rest}/>
         ))}
       </ul>
@@ -90,10 +82,10 @@ const TodoList = (): ReactElement => {
 
   return (
     <Card name={'TodoList'} widthClass={'col-md-4'}>
-      <TodoForm onAddTask={handleAddTask}
+      <TodoForm onAddTodo={handleAddTodo}
                 inputValue={inputValue}
                 errorMessage={errorMessage}
-                onInputTask={handleInputTask}
+                onInputTodo={handleInputTodo}
                 inputRef={inputRef}/>
 
       {renderTodoItems()}

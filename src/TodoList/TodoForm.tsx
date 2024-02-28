@@ -4,25 +4,25 @@ import clsx from 'clsx'
 interface InterfaceProps {
   inputValue: string
   errorMessage: string
-  onInputTask: (e: ChangeEvent<HTMLInputElement>) => void
-  onAddTask: (e: FormEvent<HTMLFormElement>) => void
+  onInputTodo: (e: ChangeEvent<HTMLInputElement>) => void
+  onAddTodo: (e: FormEvent<HTMLFormElement>) => void
   inputRef: RefObject<HTMLInputElement>
 }
 
-const TodoForm: FC<InterfaceProps> = ({ inputValue, errorMessage, onInputTask, onAddTask, inputRef }): ReactElement => {
+const TodoForm: FC<InterfaceProps> = ({ inputValue, errorMessage, onInputTodo, onAddTodo, inputRef }): ReactElement => {
   const inputClass = clsx('form-control', {
     'is-invalid': errorMessage.length !== 0
   })
 
   return (
-    <form className="input-group mb-3" onSubmit={onAddTask}>
+    <form className="input-group mb-3" onSubmit={onAddTodo}>
 
-      <input onChange={onInputTask}
+      <input onChange={onInputTodo}
              value={inputValue}
              ref={inputRef}
              type="text"
              className={inputClass}
-             placeholder="Task name"/>
+             placeholder="Todo name"/>
 
        <button className="btn btn-primary" type="submit">Add task</button>
 
